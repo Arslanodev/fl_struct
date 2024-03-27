@@ -1,7 +1,7 @@
 # Description
 Simple CLI application for structuring files into folders  
 
-<img src="imgs/showcase.png" alt="showcase" width="400"/>
+<img src="https://github.com/Arslanodev/fl_struct/blob/main/imgs/showcase.png" alt="showcase" width="400"/>
 
 ### Usage example
 Commands:
