@@ -125,6 +125,8 @@ func ListFiles(dirPath string, option string) {
 		SortByFileKind(entries)
 	case "-d":
 		SortByDateAdded(entries)
+	default:
+		SortByFileName(entries)
 	}
 
 	lengths := DetermineColumnLengths(entries)

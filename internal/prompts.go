@@ -9,14 +9,14 @@ import (
 
 func PromptDirPathWithOptions() (string, string) {
 	fmt.Println(`
-Select directory path
+List files with various filtering options
 
 Options:
 -s sort by file size
 -k sort by file kind
 -d sort by file date added
 
-Example: ./Users/arslan/Desktop -s
+Example: /Users/user/Desktop -s
 	`)
 	prompt := promptui.Prompt{
 		Label: "Enter directory path",
