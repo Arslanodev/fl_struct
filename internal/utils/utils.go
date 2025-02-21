@@ -130,8 +130,10 @@ func ListFiles(dirPath string, option string) {
 	}
 
 	lengths := DetermineColumnLengths(entries)
-	format := fmt.Sprintf("%s %s %s %s %s\n", lengths["count"], lengths["size"], lengths["filename"], lengths["kind"], lengths["date"])
-	fmt.Printf(format, "count", "size", "name", "kind", "date")
+
+	// Header
+	format := "%s" + lengths["count"] + " " + lengths["size"] + " " + lengths["filename"] + " " + lengths["kind"] + " " + lengths["date"] + " " + "%s\n"
+	fmt.Printf(format, boldCyan, "count", "size", "name", "kind", "date", reset)
 
 	for index, entry := range entries {
 		info, err := entry.Info()
@@ -140,15 +142,16 @@ func ListFiles(dirPath string, option string) {
 			continue
 		}
 
-		PrintFileInfo(internal.FileInfo{
+		fileInfo := internal.FileInfo{
 			Count:     int64(index + 1),
 			Name:      entry.Name(),
 			Size:      FormatBytes(uint64(info.Size())),
 			Kind:      filepath.Ext(entry.Name()),
 			DateAdded: info.ModTime().Format("2006-01-02 15:04:05"),
-		}, format)
-	}
+		}
 
+		PrintFileInfo(fileInfo, lengths)
+	}
 }
 
 func FormatBytes(bytes uint64) string {
