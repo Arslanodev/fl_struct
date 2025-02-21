@@ -84,8 +84,8 @@ func DetermineColumnLengths(files []fs.DirEntry) map[string]string {
 
 		// Size column length
 		info, _ := file.Info()
-		if len(strconv.Itoa(int(info.Size()))) > lengths.Size {
-			lengths.Size = len(strconv.Itoa(int(info.Size())))
+		if len(FormatBytes(uint64(info.Size()))) > lengths.Size {
+			lengths.Size = len(FormatBytes(uint64(info.Size())))
 		}
 
 		// Kind column length
@@ -141,10 +141,23 @@ func ListFiles(dirPath string, option string) {
 		PrintFileInfo(internal.FileInfo{
 			Count:     int64(index + 1),
 			Name:      entry.Name(),
-			Size:      info.Size(),
+			Size:      FormatBytes(uint64(info.Size())),
 			Kind:      filepath.Ext(entry.Name()),
 			DateAdded: info.ModTime().Format("2006-01-02 15:04:05"),
 		}, format)
 	}
 
+}
+
+func FormatBytes(bytes uint64) string {
+	const unit = 1024
+	if bytes < unit {
+		return fmt.Sprintf("%d B", bytes)
+	}
+	div, exp := uint64(unit), 0
+	for n := bytes / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.2f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
 }

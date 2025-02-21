@@ -3,7 +3,7 @@ package internal
 type FileInfo struct {
 	Count     int64
 	Name      string
-	Size      int64
+	Size      string
 	Kind      string
 	DateAdded string
 }
