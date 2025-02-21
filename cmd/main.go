@@ -9,12 +9,14 @@ import (
 )
 
 func main() {
+
 	prompt := promptui.Select{
 		Label: "Select functions to execute:",
 		Items: []string{
-			"List files (sort by: name, size, kind, date added)",
+			"List files",
 			"Search files",
 			"Group files",
+			"Analyze Dir",
 			"Index files (for quicker search)",
 		},
 	}
