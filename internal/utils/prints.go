@@ -60,7 +60,3 @@ func PrintFileInfo(info internal.FileInfo, format map[string]string) {
 	// Date (dim white)
 	fmt.Printf("%s"+format["date"]+"%s\n", dimWhite, info.DateAdded, reset)
 }
-
-func BuildFormat(color, column, reset string) string {
-	return color + column + reset
-}

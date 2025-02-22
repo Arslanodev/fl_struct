@@ -112,21 +112,15 @@ func DetermineColumnLengths(files []fs.DirEntry) map[string]string {
 }
 
 func ListFiles(dirPath string, option string) {
-	entries, err := os.ReadDir(dirPath)
+	fullpath, err := filepath.Abs(filepath.Clean(dirPath))
 	if err != nil {
-		fmt.Println("Failed to read base directory path")
+		fmt.Println("Failed to get absolute path: ", err)
+		return
 	}
 
-	// Sorting
-	switch option {
-	case "-s":
-		SortBySize(entries)
-	case "-k":
-		SortByFileKind(entries)
-	case "-d":
-		SortByDateAdded(entries)
-	default:
-		SortByFileName(entries)
+	entries, err := os.ReadDir(fullpath)
+	if err != nil {
+		fmt.Println("Failed to read base directory path")
 	}
 
 	lengths := DetermineColumnLengths(entries)
@@ -135,6 +129,7 @@ func ListFiles(dirPath string, option string) {
 	format := "%s" + lengths["count"] + " " + lengths["size"] + " " + lengths["filename"] + " " + lengths["kind"] + " " + lengths["date"] + " " + "%s\n"
 	fmt.Printf(format, boldCyan, "count", "size", "name", "kind", "date", reset)
 
+	var filesInfo []internal.FileInfo
 	for index, entry := range entries {
 		info, err := entry.Info()
 		if err != nil {
@@ -145,12 +140,41 @@ func ListFiles(dirPath string, option string) {
 		fileInfo := internal.FileInfo{
 			Count:     int64(index + 1),
 			Name:      entry.Name(),
-			Size:      FormatBytes(uint64(info.Size())),
 			Kind:      filepath.Ext(entry.Name()),
 			DateAdded: info.ModTime().Format("2006-01-02 15:04:05"),
 		}
 
-		PrintFileInfo(fileInfo, lengths)
+		if entry.IsDir() {
+			path := filepath.Join(fullpath, entry.Name())
+			size, err := GetDirSize(path)
+			if err != nil {
+				fmt.Println("failed to get dir size: ", err)
+				return
+			}
+			fileInfo.Size = FormatBytes(uint64(size))
+			fileInfo.ByteSize = size
+		} else {
+			fileInfo.Size = FormatBytes(uint64(info.Size()))
+			fileInfo.ByteSize = info.Size()
+		}
+
+		filesInfo = append(filesInfo, fileInfo)
+	}
+
+	// Sorting
+	switch option {
+	case "-s":
+		SortBySize(filesInfo)
+	case "-k":
+		SortByFileKind(filesInfo)
+	case "-d":
+		SortByDateAdded(filesInfo)
+	default:
+		SortByFileName(filesInfo)
+	}
+
+	for _, info := range filesInfo {
+		PrintFileInfo(info, lengths)
 	}
 }
 
@@ -165,4 +189,37 @@ func FormatBytes(bytes uint64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.2f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
+}
+
+func GetDirSize(path string) (int64, error) {
+	var size int64
+
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		fmt.Println("Failed to read directory")
+		return 0, err
+	}
+
+	for _, entry := range entries {
+		fullPath := filepath.Join(path, entry.Name())
+		if entry.IsDir() {
+			// Recursively get the size of the subdirectory
+			subDirSize, err := GetDirSize(fullPath)
+			if err != nil {
+				fmt.Println("Failed to get dir size")
+				return 0, err
+			}
+			size += subDirSize
+		} else {
+			// Get the file size
+			info, err := entry.Info()
+			if err != nil {
+				fmt.Println("Failed to get entry info")
+				return 0, err
+			}
+			size += info.Size()
+		}
+	}
+
+	return size, nil
 }

@@ -4,6 +4,7 @@ type FileInfo struct {
 	Count     int64
 	Name      string
 	Size      string
+	ByteSize  int64
 	Kind      string
 	DateAdded string
 }
