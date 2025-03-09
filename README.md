@@ -44,6 +44,7 @@ Take control of your file storage and discover a more efficient way to manage yo
 3. Move the executable file to `/usr/local/bin` (optional, for macOS users)
 
 ## Usage
+![preview](https://github.com/user-attachments/assets/51cf4e3f-7342-44b8-9ee5-58b4374ec83e)
 
 ### Running the Application
 
