@@ -14,10 +14,10 @@ func main() {
 		Label: "Select functions to execute:",
 		Items: []string{
 			"List files",
-			"Search files",
 			"Group files",
-			"Analyze Dir",
-			"Index files (for quicker search)",
+			"Search files (Under development)",
+			"Analyze Dir (Under development)",
+			"Index files (for quicker search) (Under development)",
 		},
 	}
 

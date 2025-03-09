@@ -130,7 +130,7 @@ func ListFiles(dirPath string, option string) {
 	fmt.Printf(format, boldCyan, "count", "size", "name", "kind", "date", reset)
 
 	var filesInfo []internal.FileInfo
-	for index, entry := range entries {
+	for _, entry := range entries {
 		info, err := entry.Info()
 		if err != nil {
 			fmt.Printf("Error getting file info: %v\n", err)
@@ -138,7 +138,6 @@ func ListFiles(dirPath string, option string) {
 		}
 
 		fileInfo := internal.FileInfo{
-			Count:     int64(index + 1),
 			Name:      entry.Name(),
 			Kind:      filepath.Ext(entry.Name()),
 			DateAdded: info.ModTime().Format("2006-01-02 15:04:05"),
