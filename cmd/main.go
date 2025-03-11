@@ -31,6 +31,9 @@ func main() {
 		internal.ListFiles(dirPath, option)
 	case 1:
 		dirPath, _ := internal.PromptDirPathWithOptions("group files")
-		internal.Structurize(dirPath)
+		// Prompt additional validation message
+		if internal.PromptYesOrNo(dirPath) {
+			internal.Structurize(dirPath)
+		}
 	}
 }
