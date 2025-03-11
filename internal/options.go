@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/manifoldco/promptui"
 )
 
 func Structurize(dirPath string) {
@@ -102,28 +104,41 @@ func ListFiles(dirPath string, option string) {
 }
 
 // It performs a partial match (substring search) on the file or folder name.
-func SearchFileOrFolder(dirPath, name string) ([]string, error) {
-	var matches []string
+func SearchFileOrFolder(dirPath string) {
+	var filepaths []string
 
 	directory, _ := filepath.Abs(filepath.Clean(dirPath))
 
 	// Walk through the directory and its subdirectories
 	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err // Handle errors during traversal
-		}
-
-		// Check if the current file or directory name contains the search term (case-sensitive)
-		if strings.Contains(info.Name(), name) {
-			matches = append(matches, path)
-		}
-
+		filepaths = append(filepaths, path)
 		return nil
 	})
 
 	if err != nil {
-		return nil, err
+		fmt.Println("Failed to walk through file: ", err)
+		return
 	}
 
-	return matches, nil
+	prompt := promptui.Select{
+		Label:             "Search for a fruit",
+		Items:             filepaths,
+		Size:              5, // Number of items to display at once
+		StartInSearchMode: true,
+		Searcher: func(input string, index int) bool {
+			// Perform a case-insensitive substring search
+			fruit := filepaths[index]
+			return strings.Contains(strings.ToLower(fruit), strings.ToLower(input))
+		},
+	}
+
+	// Run the prompt
+	_, result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed: %v\n", err)
+		return
+	}
+
+	// Display the selected result
+	fmt.Printf("You selected: %s\n", result)
 }

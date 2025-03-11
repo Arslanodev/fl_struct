@@ -36,18 +36,8 @@ func main() {
 			internal.Structurize(dirPath)
 		}
 	case 2:
-		keyword := internal.PromptSearchKeyword()
 		dirPath, _ := internal.PromptDirPathWithOptions("")
 
-		filePaths, err := internal.SearchFileOrFolder(dirPath, keyword)
-		if err != nil {
-			fmt.Println("Failed to search files: ", err)
-			return
-		}
-
-		for _, filepath := range filePaths {
-			fmt.Println(filepath)
-		}
-
+		internal.SearchFileOrFolder(dirPath)
 	}
 }
