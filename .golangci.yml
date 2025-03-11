@@ -1,0 +1,34 @@
+linters:
+  disable-all: true
+  enable:
+    - asciicheck
+    - asasalint
+    - bidichk
+    - bodyclose
+    - copyloopvar
+    - cyclop
+    - decorder
+    # - depguard
+    - dogsled
+    - dupl
+    - dupword
+    - err113
+    - errname
+    - exhaustive
+    # - exhaustruct
+    - exptostd
+    - fatcontext
+    - forcetypeassert
+    - funlen
+    - gochecknoglobals
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - gofumpt
+    - goimports
+
+run:
+
+issues:
