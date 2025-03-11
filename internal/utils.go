@@ -5,8 +5,10 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 )
@@ -131,4 +133,29 @@ func GetDirSize(path string) (int64, error) {
 	}
 
 	return size, nil
+}
+
+// OpenLocation opens the parent directory of a file or folder in the system's file explorer.
+func OpenLocation(path string) error {
+	var cmd *exec.Cmd
+
+	// Determine the OS and construct the appropriate command
+	switch runtime.GOOS {
+	case "darwin": // macOS
+		cmd = exec.Command("open", "-R", path)
+	case "linux": // Linux
+		cmd = exec.Command("xdg-open", path)
+	case "windows": // Windows
+		cmd = exec.Command("explorer", "/select", path)
+	default:
+		return fmt.Errorf("unsupported operating system: %s", runtime.GOOS)
+	}
+
+	// Run the command
+	err := cmd.Run()
+	if err != nil {
+		return fmt.Errorf("failed to open location: %v", err)
+	}
+
+	return nil
 }

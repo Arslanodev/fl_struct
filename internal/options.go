@@ -123,7 +123,7 @@ func SearchFileOrFolder(dirPath string) {
 	prompt := promptui.Select{
 		Label:             "Search for a fruit",
 		Items:             filepaths,
-		Size:              5, // Number of items to display at once
+		Size:              7, // Number of items to display at once
 		StartInSearchMode: true,
 		Searcher: func(input string, index int) bool {
 			// Perform a case-insensitive substring search
@@ -140,5 +140,5 @@ func SearchFileOrFolder(dirPath string) {
 	}
 
 	// Display the selected result
-	fmt.Printf("You selected: %s\n", result)
+	OpenLocation(result)
 }
