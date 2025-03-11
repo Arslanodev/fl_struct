@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/Arslanodev/fl_struct/internal"
-	"github.com/Arslanodev/fl_struct/internal/utils"
 	"github.com/manifoldco/promptui"
 )
 
@@ -13,7 +12,7 @@ func main() {
 		Label: "Select functions to execute:",
 		Items: []string{
 			"List files",
-			"Group files (Under development)",
+			"Group files",
 			"Search files (Under development)",
 			"Analyze Dir (Under development)",
 			"Index files (for quicker search) (Under development)",
@@ -29,6 +28,9 @@ func main() {
 	switch index {
 	case 0:
 		dirPath, option := internal.PromptDirPathWithOptions()
-		utils.ListFiles(dirPath, option)
+		internal.ListFiles(dirPath, option)
+	case 1:
+		dirPath, _ := internal.PromptDirPathWithOptions()
+		internal.Structurize(dirPath)
 	}
 }
