@@ -48,7 +48,6 @@ func MoveFile(sourcePath, destPath string) error {
 }
 
 func Structurize(root_dir string) {
-
 	files, _ := os.ReadDir(root_dir)
 
 	for _, item := range files {
@@ -172,7 +171,8 @@ func ListFiles(dirPath string, option string) {
 		SortByFileName(filesInfo)
 	}
 
-	for _, info := range filesInfo {
+	for index, info := range filesInfo {
+		info.Count = int64(index) + 1
 		PrintFileInfo(info, lengths)
 	}
 }
