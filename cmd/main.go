@@ -27,10 +27,10 @@ func main() {
 
 	switch index {
 	case 0:
-		dirPath, option := internal.PromptDirPathWithOptions()
+		dirPath, option := internal.PromptDirPathWithOptions("list files")
 		internal.ListFiles(dirPath, option)
 	case 1:
-		dirPath, _ := internal.PromptDirPathWithOptions()
+		dirPath, _ := internal.PromptDirPathWithOptions("group files")
 		internal.Structurize(dirPath)
 	}
 }

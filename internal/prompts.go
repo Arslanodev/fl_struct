@@ -7,17 +7,14 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func PromptDirPathWithOptions() (string, string) {
-	fmt.Println(`
-List files with various filtering options
+func PromptDirPathWithOptions(option string) (string, string) {
+	switch option {
+	case "list files":
+		ListFilesMessage()
+	case "group files":
+		GroupFilesMessage()
+	}
 
-Options:
--s sort by file size
--k sort by file kind
--d sort by file date added
-
-Example: /Users/user/Desktop -s
-	`)
 	prompt := promptui.Prompt{
 		Label: "Enter directory path",
 	}
@@ -34,4 +31,25 @@ Example: /Users/user/Desktop -s
 	}
 
 	return params[0], params[1]
+}
+
+func ListFilesMessage() {
+	fmt.Println(`
+List files with various filtering options
+
+Options:
+-s sort by file size
+-k sort by file kind
+-d sort by file date added
+
+Example: /Users/user/Desktop -s
+	`)
+}
+
+func GroupFilesMessage() {
+	fmt.Println(`
+Group files into folders according to their kind
+
+Example: /Users/user/Desktop
+	`)
 }
