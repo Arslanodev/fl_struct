@@ -58,6 +58,20 @@ func PromptYesOrNo(selectedDirPath string) bool {
 	return false
 }
 
+func PromptSearchKeyword() string {
+	prompt := promptui.Prompt{
+		Label: "Enter search keyword",
+	}
+
+	keyword, err := prompt.Run()
+	if err != nil {
+		fmt.Println("Failed to get keyword from prompt: ", err)
+		return keyword
+	}
+
+	return keyword
+}
+
 func ListFilesMessage() {
 	fmt.Println(`
 List files with various filtering options

@@ -13,7 +13,7 @@ func main() {
 		Items: []string{
 			"List files",
 			"Group files",
-			"Search files (Under development)",
+			"Search files and folders",
 			"Analyze Dir (Under development)",
 			"Index files (for quicker search) (Under development)",
 		},
@@ -35,5 +35,19 @@ func main() {
 		if internal.PromptYesOrNo(dirPath) {
 			internal.Structurize(dirPath)
 		}
+	case 2:
+		keyword := internal.PromptSearchKeyword()
+		dirPath, _ := internal.PromptDirPathWithOptions("")
+
+		filePaths, err := internal.SearchFileOrFolder(dirPath, keyword)
+		if err != nil {
+			fmt.Println("Failed to search files: ", err)
+			return
+		}
+
+		for _, filepath := range filePaths {
+			fmt.Println(filepath)
+		}
+
 	}
 }

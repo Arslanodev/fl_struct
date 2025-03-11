@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func Structurize(dirPath string) {
@@ -98,4 +99,31 @@ func ListFiles(dirPath string, option string) {
 		info.Count = int64(index) + 1
 		PrintFileInfo(info, lengths)
 	}
+}
+
+// It performs a partial match (substring search) on the file or folder name.
+func SearchFileOrFolder(dirPath, name string) ([]string, error) {
+	var matches []string
+
+	directory, _ := filepath.Abs(filepath.Clean(dirPath))
+
+	// Walk through the directory and its subdirectories
+	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err // Handle errors during traversal
+		}
+
+		// Check if the current file or directory name contains the search term (case-sensitive)
+		if strings.Contains(info.Name(), name) {
+			matches = append(matches, path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return matches, nil
 }
