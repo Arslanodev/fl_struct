@@ -80,6 +80,7 @@ Options:
 -s sort by file size
 -k sort by file kind
 -d sort by file date added
+-l list largest files asc
 
 Example: /Users/user/Desktop -s
 	`)
@@ -90,7 +91,7 @@ func GroupFilesMessage() {
 Group files into folders according to their kind
 
 Options:
--e group by file extension (.img, .png, .dmg, etc.)
+-e group by file extension (default) (.img, .png, .dmg, etc.)
 -k group by file kind (videos, audio, documents, etc.)
 
 Example: /Users/user/Desktop

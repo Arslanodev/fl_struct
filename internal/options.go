@@ -57,6 +57,17 @@ func ListFiles(dirPath string, option string) {
 	format := "%s" + lengths["count"] + " " + lengths["size"] + " " + lengths["filename"] + " " + lengths["kind"] + " " + lengths["date"] + " " + "%s\n"
 	fmt.Printf(format, boldCyan, "count", "size", "name", "kind", "date", reset)
 
+	if option == "-l" {
+		var filesInfo []FileInfo
+		WalkThroughFolder(fullpath, &filesInfo)
+		SortBySize(filesInfo)
+		for index, info := range filesInfo {
+			info.Count = int64(index) + 1
+			PrintFileInfo(info, lengths)
+		}
+		return
+	}
+
 	var filesInfo []FileInfo
 	for _, entry := range entries {
 		info, err := entry.Info()
@@ -144,4 +155,32 @@ func SearchFileOrFolder(dirPath string) {
 
 	// Display the selected result
 	OpenLocation(result)
+}
+
+func WalkThroughFolder(fullpath string, fileInfo *[]FileInfo) {
+	entries, err := os.ReadDir(fullpath)
+	if err != nil {
+		fmt.Println("Failed to read base directory path")
+	}
+
+	for _, entry := range entries {
+		info, err := entry.Info()
+		if err != nil {
+			fmt.Printf("Error getting file info: %v\n", err)
+			continue
+		}
+
+		if entry.IsDir() {
+			path := filepath.Join(fullpath, entry.Name())
+			WalkThroughFolder(path, fileInfo)
+		} else {
+			*fileInfo = append(*fileInfo, FileInfo{
+				Name:      entry.Name(),
+				Kind:      filepath.Ext(entry.Name()),
+				DateAdded: info.ModTime().Format("2006-01-02 15:04:05"),
+				Size:      FormatBytes(uint64(info.Size())),
+				ByteSize:  info.Size(),
+			})
+		}
+	}
 }

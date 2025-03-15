@@ -7,6 +7,7 @@ type FileInfo struct {
 	ByteSize  int64
 	Kind      string
 	DateAdded string
+	FilePath  string
 }
 
 type FileColumnLengths struct {
