@@ -20,18 +20,21 @@ func Structurize(dirPath string) {
 
 	for _, item := range files {
 		if !item.IsDir() {
-			src_path := filepath.Join(fullPath, item.Name())
-			fl_ext := GetFileExtension(src_path)
+			// Check if the file name does not start with a dot
+			if item.Name()[0] != '.' {
+				src_path := filepath.Join(fullPath, item.Name())
+				fl_ext := GetFileExtension(src_path)
 
-			dest_dir := filepath.Join(fullPath, fl_ext)
+				dest_dir := filepath.Join(fullPath, fl_ext)
 
-			os.Mkdir(dest_dir, os.ModePerm)
+				os.Mkdir(dest_dir, os.ModePerm)
 
-			dest_fl_path := filepath.Join(dest_dir, item.Name())
-			MoveFile(src_path, dest_fl_path)
+				dest_fl_path := filepath.Join(dest_dir, item.Name())
+				MoveFile(src_path, dest_fl_path)
 
-			result := src_path + " -> " + dest_fl_path
-			fmt.Println(result)
+				result := src_path + " -> " + dest_fl_path
+				fmt.Println(result)
+			}
 		}
 	}
 }
